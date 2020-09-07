@@ -5,6 +5,9 @@ import passport from 'passport';
 
 require('dotenv').config();
 
+const redisClient = require('redis').createClient();
+const RedisStore = require('connect-redis')(session);
+
 const app = express();
 
 import './utils/database';
@@ -13,9 +16,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use(session({
+  store: new RedisStore({client: redisClient}),
   secret: process.env.SESSIONS_SECRET || '$%#%5j4iojro5387',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
 }));
 
 import setLocalStrategy from './config/passport';

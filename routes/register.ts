@@ -21,6 +21,7 @@ router.post('/', [
   body('password', 'Password is required').notEmpty(),
   body('password2', 'Passwords do not match')
       .custom((pass2, {req}) => pass2 === req.body.password),
+  body('email').normalizeEmail(),
 ], async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
