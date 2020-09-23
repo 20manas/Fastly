@@ -7,4 +7,4 @@ router.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-export {router};
+export default router;

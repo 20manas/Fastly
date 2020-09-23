@@ -1,0 +1,7 @@
+{
+  "short_name": "Test",
+  "name": "Test",
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

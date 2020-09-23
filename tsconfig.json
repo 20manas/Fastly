@@ -4,6 +4,19 @@
     "allowSyntheticDefaultImports": true,
     "rootDir": "./",
     "outDir": "./build",
-    "jsx": "react"
-  }
+    "jsx": "preserve",
+    "allowJs": true,
+    "noEmit": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

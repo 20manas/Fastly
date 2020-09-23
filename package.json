@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.ts",
-    "build": "tsc --project ./",
-    "prod-start": "nodemon ./build/app"
+    "start": "NODE_ENV=production node ./build/app.js",
+    "dev": "ts-node --project tsconfig.server.json app.ts",
+    "build": "next build && tsc --project tsconfig.server.json"
   },
   "keywords": [],
   "author": "",
@@ -20,12 +20,16 @@
     "@types/pg": "^7.14.4",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
-    "eslint": "^7.8.1",
+    "@types/ws": "^7.2.6",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.20.6",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.0",
     "nodemon": "^2.0.4",
+    "prettier": "^2.1.2",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   },
@@ -38,11 +42,17 @@
     "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
     "helmet": "^4.1.0",
+    "next": "^9.5.3",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.3.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "ws": "^7.3.1"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
   }
 }
