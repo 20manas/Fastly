@@ -9,12 +9,8 @@ interface User {
   name: string;
   email: string;
   password: string;
+  friends: Set<number>;
 }
-
-// interface PieceOfContent {
-//   type: 'text' | 'image' | 'Post',
-//   rawData: any,
-// }
 
 interface Post {
   id: number;

@@ -1,12 +1,8 @@
 import React from 'react';
-import {Layout, User} from '../components/layout';
+import {Layout} from '../components/layout';
 
-interface LoginProps {
-  user: User;
-}
-
-const Login = ({user} : LoginProps) => (
-  <Layout user={user}>
+const Login = () => (
+  <Layout>
     <section>
       <h2>Login</h2>
       <form method="POST" action="/login">

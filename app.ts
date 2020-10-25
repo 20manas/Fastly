@@ -12,6 +12,7 @@ import setLocalStrategy from './config/passport';
 import registerRouter from './routes/register';
 import loginRouter from './routes/login';
 import logoutRouter from './routes/logout';
+import userRouter from './routes/user';
 
 const redisClient = require('redis').createClient();
 const RedisStore = require('connect-redis')(session);
@@ -43,6 +44,7 @@ nextApp.prepare().then(() => {
   app.use('/register', registerRouter);
   app.use('/login', loginRouter);
   app.use('/logout', logoutRouter);
+  app.use('/user', userRouter);
 
   app.all('*', (req, res) => {
     return nextHandle(req, res);

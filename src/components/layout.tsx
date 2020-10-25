@@ -1,25 +1,30 @@
 import React from 'react';
+import useSwr from 'swr';
 
 type User = undefined | {
-  name?: string
+  name: string
 };
 
-interface HelloProps {
-  user: User;
-}
-
 interface LayoutProps {
-  user: User;
   children: React.ReactNode;
 }
 
-const Hello = ({user}: HelloProps) =>
-  user?.name ? <h1>Hello, {user.name}</h1> : <></>;
+const Hello = () => {
+  const {data} = useSwr<User, undefined>(
+      '/user',
+      async (url) => await fetch(url).then(res => res.json()),
+  );
+  if (data) {
+    return <h1>Hello, {data.name}</h1>;
+  } else {
+    return <></>;
+  }
+};
 
-const Layout = ({user, children}: LayoutProps) => (
+const Layout = ({children}: LayoutProps) => (
   <>
     <p>Test Website</p>
-    <Hello user={user} />
+    <Hello/>
     {children}
   </>
 );

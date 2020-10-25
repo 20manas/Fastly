@@ -1,12 +1,8 @@
 import React from 'react';
-import {Layout, User} from '../components/layout';
+import {Layout} from '../components/layout';
 
-interface RegisterProps {
-  user: User
-}
-
-const Register = ({user}: RegisterProps) => (
-  <Layout user={user}>
+const Register = () => (
+  <Layout>
     <section>
       <h2>Register</h2>
       <form action="/register" method="POST">
