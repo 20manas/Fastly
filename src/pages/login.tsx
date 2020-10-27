@@ -1,20 +1,23 @@
 import React from 'react';
 import {Layout} from '../components/layout';
+import styles from '../styles/login.module.css';
 
 const Login = () => (
   <Layout>
-    <section>
+    <section className={styles.card}>
       <h2>Login</h2>
       <form method="POST" action="/login">
-        <label htmlFor="username">Username: </label>
-        <input type="text" name="username" id="username"></input>
-        <br />
+        <label htmlFor="username">
+          <span>Username</span>
+          <input type="text" name="username" id="username" />
+        </label>
 
-        <label htmlFor="password">Password: </label>
-        <input type="password" name="password" id="password"></input>
-        <br />
+        <label htmlFor="password">
+          <span>Password</span>
+          <input type="password" name="password" id="password" />
+        </label>
 
-        <input type="submit" value="submit" />
+        <input type="submit" value="SUBMIT" />
       </form>
     </section>
   </Layout>
