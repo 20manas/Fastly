@@ -1,7 +1,7 @@
 import React from 'react';
 import useSwr from 'swr';
 
-type User = undefined | {
+export type User = undefined | {
   name: string
 };
 
@@ -21,7 +21,7 @@ const Hello = () => {
   }
 };
 
-const Layout = ({children}: LayoutProps) => (
+export const Layout = ({children}: LayoutProps) => (
   <>
     <style jsx global>{`
       body {
@@ -51,7 +51,3 @@ const Layout = ({children}: LayoutProps) => (
     {children}
   </>
 );
-
-export {Layout};
-
-export type {User};

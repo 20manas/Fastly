@@ -1,26 +1,22 @@
 import {PassportStatic} from 'passport';
+import * as db from '../database/users';
+import {User, UserEssentials} from '../database/types/users';
 
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 
-import * as db from '../utils/database';
-
 export default (passport: PassportStatic): void => {
   passport.use(new LocalStrategy(
-      async (username: string, password: string, done: any) => {
+      async (username: User['username'], password: User['password'], done: any) => {
         try {
-          const result = await db.query(
-              'SELECT * FROM users WHERE username=$1 LIMIT 1',
-              [username],
-          );
-          const user = result.rows[0];
-          if (!user) {
+          const user = await db.getPassword(username);
+          if (user == null) {
             return done(null, false, {message: 'The username does not exist!'});
           }
 
           const isMatch = await bcrypt.compare(password, user.password);
           if (isMatch) {
-            return done(null, user);
+            return done(null, await db.getUserById(user.id));
           } else {
             return done(null, false, {message: 'Wrong password!'});
           }
@@ -31,17 +27,12 @@ export default (passport: PassportStatic): void => {
       },
   ));
 
-  passport.serializeUser((user: db.User, done) => done(null, user.id));
+  passport.serializeUser((user: UserEssentials, done) => done(null, user.id));
 
-  passport.deserializeUser((id: number, done) =>
+  passport.deserializeUser((id: UserEssentials['id'], done) =>
     db
-        .query(
-            'SELECT * FROM users WHERE id=$1 LIMIT 1',
-            [id],
-        )
-        .then(
-            (result) => done(null, result.rows[0]),
-        )
+        .getUserById(id)
+        .then((user) => done(null, user))
         .catch((err) => done(err, null)),
   );
 };

@@ -6,13 +6,10 @@ import next from 'next';
 
 require('dotenv').config();
 
-import './utils/database';
-import setLocalStrategy from './config/passport';
+import './loaders/database';
+import setLocalStrategy from './loaders/passport';
 
-import registerRouter from './routes/register';
-import loginRouter from './routes/login';
-import logoutRouter from './routes/logout';
-import userRouter from './routes/user';
+import routers from './loaders/routers';
 
 const redisClient = require('redis').createClient();
 const RedisStore = require('connect-redis')(session);
@@ -41,10 +38,7 @@ nextApp.prepare().then(() => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.use('/register', registerRouter);
-  app.use('/login', loginRouter);
-  app.use('/logout', logoutRouter);
-  app.use('/user', userRouter);
+  routers(app);
 
   app.all('*', (req, res) => {
     return nextHandle(req, res);
