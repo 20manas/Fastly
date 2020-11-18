@@ -17,7 +17,7 @@ CREATE TABLE friends (
  * - `undefined` if no request or connection exists
  * - `null` if the users are already friends
  * - `true` if senderId has sent a request to receiverId
- * - `false` false senderId has received a request from receiverId
+ * - `false` if senderId has received a request from receiverId
  */
 
 export const getFriendRequestStatus =
@@ -56,6 +56,19 @@ async (userId: User['id']) => {
   return result.rows;
 };
 
+export const getFriendList =
+async (userId: User['id']) => {
+  const result = await db.query(
+      `SELECT username
+      FROM users INNER JOIN (
+        SELECT friend_id
+        FROM friends WHERE id=$1 AND request_sent IS NULL
+      ) AS receiver ON users.id=receiver.friend_id`,
+      [userId],
+  );
+  return result.rows;
+};
+
 // INSERTIONS
 
 export const addFriendRequest = async (senderId: User['id'], receiverId: User['id']) => {
@@ -74,12 +87,10 @@ export const addFriendRequest = async (senderId: User['id'], receiverId: User['i
 
 export const addFriend = async (senderId: User['id'], receiverId: User['id']) => {
   await db.query(
-      'UPDATE friends SET request_sent=null WHERE id=$1 AND friend_id=$2',
+      `UPDATE friends
+      SET request_sent=NULL
+      WHERE (id=$1 AND friend_id=$2) OR (id=$2 AND friend_id=$1)`,
       [senderId, receiverId],
-  );
-  await db.query(
-      'UPDATE friends SET request_sent=null WHERE id=$1 AND friend_id=$2',
-      [receiverId, senderId],
   );
   return true;
 };
@@ -88,12 +99,9 @@ export const addFriend = async (senderId: User['id'], receiverId: User['id']) =>
 
 export const removeFriend = async (senderId: User['id'], receiverId: User['id']) => {
   await db.query(
-      'DELETE FROM friends WHERE id=$1 AND friend_id=$2',
+      `DELETE FROM friends
+      WHERE (id=$1 AND friend_id=$2) OR (id=$2 AND friend_id=$1)`,
       [senderId, receiverId],
-  );
-  await db.query(
-      'DELETE FROM friends WHERE id=$1 AND friend_id=$2',
-      [receiverId, senderId],
   );
   return true;
 };

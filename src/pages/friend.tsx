@@ -2,6 +2,22 @@ import React, {useState, useEffect, FormEvent} from 'react';
 import {Layout} from '../components/layout';
 import loginstyles from '../styles/login.module.css';
 
+const Friends = () => {
+  const [list, setList] = useState(null);
+
+  useEffect(() => {
+    fetch('getfriends')
+        .then(result => result.json())
+        .then(list => setList(
+            list.map(
+                (user: {username: string}) => (<li key={user.username}>{user.username}</li>),
+            ),
+        ));
+  }, []);
+
+  return (<ul>{list}</ul>);
+};
+
 const Request = () => {
   const [list, setList] = useState(null);
 
@@ -57,6 +73,7 @@ const Accept = () => {
 const Friend = () => (
   <Layout>
     <section className={loginstyles.card}>
+      <Friends />
       <Request />
       <Accept />
     </section>

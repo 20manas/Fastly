@@ -3,9 +3,9 @@ import {body, validationResult} from 'express-validator';
 
 import {registerUser} from '../services/register';
 
-const router = Router();
+export const registerRouter = Router();
 
-router.post(
+registerRouter.post(
     '/',
     [
       body('name', 'Name is required').notEmpty(),
@@ -44,5 +44,3 @@ router.post(
       }
     },
 );
-
-export default router;

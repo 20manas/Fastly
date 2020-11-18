@@ -3,7 +3,7 @@ import {body, validationResult} from 'express-validator';
 import {UserEssentials} from '../database/types/users';
 import {getUserByUsername} from '../database/users';
 import {sendFriendRequest, acceptFriendRequest} from '../services/friend';
-import {getReceivedRequests, getSentRequests} from '../database/friends';
+import {getReceivedRequests, getSentRequests, getFriendList} from '../database/friends';
 
 export const addFriendRouter = Router();
 
@@ -104,6 +104,19 @@ getSentRequestsRouter.get(
       const user = req.user as UserEssentials;
 
       const list = await getSentRequests(user.id);
+      res.json(list);
+    },
+);
+
+export const getFriendListRouter = Router();
+
+getFriendListRouter.get(
+    '/',
+    async (req: Request, res: Response) => {
+      if (!req.user) return res.status(401).send('You are not logged in.');
+      const user = req.user as UserEssentials;
+
+      const list = await getFriendList(user.id);
       res.json(list);
     },
 );

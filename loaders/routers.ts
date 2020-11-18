@@ -1,13 +1,14 @@
 import {Express} from 'express';
 
-import registerRouter from '../api/register';
+import {registerRouter} from '../api/register';
 import {loginRouter, logoutRouter} from '../api/authenticate';
-import userRouter from '../api/user';
+import {userRouter} from '../api/user';
 import {
   addFriendRouter,
   acceptFriendRouter,
   getReceivedRequestsRouter,
   getSentRequestsRouter,
+  getFriendListRouter,
 } from '../api/friend';
 
 export default (app: Express) => {
@@ -26,4 +27,5 @@ export default (app: Express) => {
   app.use('/acceptfriend', acceptFriendRouter);
   app.use('/getfriendrequests', getReceivedRequestsRouter);
   app.use('/getsentrequests', getSentRequestsRouter);
+  app.use('/getfriends', getFriendListRouter);
 };

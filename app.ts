@@ -1,18 +1,17 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import session from 'express-session';
 import passport from 'passport';
 import next from 'next';
 
 require('dotenv').config();
 
 import './loaders/database';
+import session from './loaders/sessions';
 import setLocalStrategy from './loaders/passport';
 
-import routers from './loaders/routers';
+import webSocketStart from './loaders/ws';
 
-const redisClient = require('redis').createClient();
-const RedisStore = require('connect-redis')(session);
+import routers from './loaders/routers';
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({dev});
@@ -24,14 +23,7 @@ nextApp.prepare().then(() => {
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
 
-  app.use(
-      session({
-        store: new RedisStore({client: redisClient}),
-        secret: process.env.SESSIONS_SECRET || '$%#%5j4iojro5387',
-        resave: false,
-        saveUninitialized: false,
-      }),
-  );
+  session(app);
 
   setLocalStrategy(passport);
 
@@ -39,6 +31,8 @@ nextApp.prepare().then(() => {
   app.use(passport.session());
 
   routers(app);
+
+  webSocketStart(app);
 
   app.all('*', (req, res) => {
     return nextHandle(req, res);
