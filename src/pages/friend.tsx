@@ -1,5 +1,6 @@
 import React, {useState, useEffect, FormEvent} from 'react';
-import {Layout} from '../components/layout';
+import Head from 'next/head';
+
 import loginstyles from '../styles/login.module.css';
 
 const Friends = () => {
@@ -71,13 +72,14 @@ const Accept = () => {
 };
 
 const Friend = () => (
-  <Layout>
-    <section className={loginstyles.card}>
-      <Friends />
-      <Request />
-      <Accept />
-    </section>
-  </Layout>
+  <section className={loginstyles.card}>
+    <Head>
+      <title>Friends</title>
+    </Head>
+    <Friends />
+    <Request />
+    <Accept />
+  </section>
 );
 
 const fetchPut = async (url: string, data: Record<string, string>) => {
@@ -95,8 +97,12 @@ const fetchPut = async (url: string, data: Record<string, string>) => {
 const extractFromForm = (form: string) => {
   const values: Record<string, string> = {};
   const elems = document.querySelectorAll(`${form} input:not([type=submit])`);
-  for (const el of [...elems]) {
-    values[el.getAttribute('name')] = el.value;
+  for (const el of Array.from(elems)) {
+    const name = el.getAttribute('name');
+
+    if (name) {
+      values[name] = (el as HTMLInputElement).value;
+    }
   }
   return values;
 };

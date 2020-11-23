@@ -1,13 +1,15 @@
 import React from 'react';
-import {Layout} from '../components/layout';
+import Head from 'next/head';
+
 import styles from '../styles/index.module.css';
 
 const Index = () => (
-  <Layout>
-    <section className={styles.card}>
-      <h1>Welcome to the Final Problem</h1>
-    </section>
-  </Layout>
+  <section className={styles.card}>
+    <Head>
+      <title>Home</title>
+    </Head>
+    <h1>Welcome to the Final Problem</h1>
+  </section>
 );
 
 export default Index;

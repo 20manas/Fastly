@@ -1,19 +1,10 @@
 import React from 'react';
-import useSwr from 'swr';
+import type {AppProps} from 'next/app';
 
-export type User = undefined | {
-  name: string
-};
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
+import useUser from '../data/user';
 
 const Hello = () => {
-  const {data: user} = useSwr<User, undefined>(
-      '/user',
-      async (url) => await fetch(url).then(res => res.json()),
-  );
+  const {user} = useUser();
   if (user) {
     return <span className="hello">Hello, {user.name}</span>;
   } else {
@@ -21,7 +12,7 @@ const Hello = () => {
   }
 };
 
-export const Layout = ({children}: LayoutProps) => (
+const App = ({Component, pageProps}: AppProps) => (
   <>
     <style jsx global>{`
       body {
@@ -48,6 +39,8 @@ export const Layout = ({children}: LayoutProps) => (
       <span>Test</span>
       <Hello />
     </header>
-    {children}
+    <Component {...pageProps} />
   </>
 );
+
+export default App;

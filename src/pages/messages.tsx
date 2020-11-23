@@ -1,16 +1,21 @@
 import React, {useEffect, useState, FormEvent} from 'react';
+import Head from 'next/head';
 
-import {Layout} from '../components/layout';
 import loginStyles from '../styles/login.module.css';
+
+import useUser from '../data/user';
 
 let ws: null | WebSocket = null;
 
 const sendMessage = (ev: FormEvent<HTMLFormElement>) => {
   ev.preventDefault();
 
-  if (ws === null) return;
+  const {user} = useUser();
+
+  if (ws === null || !user) return;
+
   ws.send(JSON.stringify({
-    sender: (document.getElementsByName('sender')[0] as HTMLInputElement).value,
+    sender: user.username,
     receiver: (document.getElementsByName('receiver')[0] as HTMLInputElement).value,
     message: (document.getElementsByName('content')[0] as HTMLInputElement).value,
   }));
@@ -32,18 +37,24 @@ const Messages = () => {
   }, []);
 
   return (
-    <Layout>
-      <section className={loginStyles.card}>
-        <h2>Messages</h2>
-        <ul>{messages}</ul>
-        <form onSubmit={sendMessage}>
-          <input type="text" name="sender"/>
+    <section className={loginStyles.card}>
+      <Head>
+        <title>Messages</title>
+      </Head>
+      <h2>Messages</h2>
+      <ul>{messages}</ul>
+      <form onSubmit={sendMessage}>
+        <label htmlFor="receiver">
+          Receiver
           <input type="text" name="receiver"/>
+        </label>
+        <label htmlFor="content">
+          Content
           <input type="text" name="content"/>
-          <input type="submit" value="Send"/>
-        </form>
-      </section>
-    </Layout>
+        </label>
+        <input type="submit" value="Send"/>
+      </form>
+    </section>
   );
 };
 
