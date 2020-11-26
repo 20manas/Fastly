@@ -1,5 +1,6 @@
 import {User, UserEssentials} from './types/users';
 import * as db from '../loaders/database';
+import {QueryResult} from 'pg';
 
 /*
 CREATE TABLE users (
@@ -15,7 +16,8 @@ CREATE TABLE users (
 
 export const getUserByUsername =
 async (username: User['username']): Promise<null | UserEssentials> => {
-  const result = await db.query(
+  type Result = QueryResult<Omit<User, 'password'>>;
+  const result: Result = await db.query(
       'SELECT id, username, name, email FROM users WHERE username=$1 LIMIT 1',
       [username],
   );
@@ -24,18 +26,18 @@ async (username: User['username']): Promise<null | UserEssentials> => {
 
 export const getUserById =
 async (id: User['id']): Promise<null | UserEssentials> => {
-  const result = await db.query(
+  type Result = QueryResult<Omit<User, 'password'>>;
+  const result: Result = await db.query(
       'SELECT id, username, name, email FROM users WHERE id=$1',
       [id],
   );
   return result.rows.length > 0 ? result.rows[0] : null;
 };
 
-type getPasswordReturn = Promise<null | {id: User['id'], password: User['password']}>;
-
 export const getPassword =
-async (username: User['username']): getPasswordReturn => {
-  const result = await db.query(
+async (username: User['username']) => {
+  type Result = QueryResult<Pick<User, 'id' | 'password'>>;
+  const result: Result = await db.query(
       'SELECT id, password FROM users WHERE username=$1 LIMIT 1',
       [username],
   );

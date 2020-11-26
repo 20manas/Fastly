@@ -12,16 +12,23 @@ CREATE TABLE messages (
 );
 */
 
+/* eslint-disable camelcase */
+interface Messages {
+  id: number;
+  sender_id: number;
+  receiver_id: number;
+  content: string;
+  sent_at: Date;
+}
+/* eslint-enable camelcase */
+
+// QUERIES
+
 export const getChat = async (
     userId1: User['id'], userId2: User['id'], limit: number,
 ) => {
-  interface Result {
-    sender_id: number;
-    receiver_id: number;
-    content: string;
-    sent_at: Date;
-  }
-  const result: QueryResult<Result> = await db.query(
+  type Result = QueryResult<Omit<Messages, 'id'>>;
+  const result: Result = await db.query(
       `SELECT sender_id, receiver_id, content, sent_at
       FROM messages
       WHERE (sender_id=$1 AND receiver_id=$2) OR (sender_id=$2 AND receiver_id=$1)`,
@@ -30,11 +37,13 @@ export const getChat = async (
   return result.rows;
 };
 
+// INSERTIONS
+
 export const addMessage = async (
     senderId: User['id'],
     receiverId: User['id'],
-    content: string,
-    date: Date,
+    content: Messages['content'],
+    date: Messages['sent_at'],
 ) => {
   await db.query(
       `INSERT INTO messages (sender_id, receiver_id, content, sent_at)

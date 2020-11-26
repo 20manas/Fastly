@@ -11,6 +11,14 @@ CREATE TABLE friends (
 );
 */
 
+/* eslint-disable camelcase */
+interface Friends {
+  id: number;
+  friend_id: number;
+  request_sent: boolean | null;
+}
+/* eslint-enable camelcase */
+
 // QUERIES
 
 /**
@@ -23,7 +31,8 @@ CREATE TABLE friends (
 
 export const getFriendRequestStatus =
 async (senderId: User['id'], receiverId: User['id']) => {
-  const result = await db.query(
+  type Result = QueryResult<Pick<Friends, 'request_sent'>>;
+  const result: Result = await db.query(
       'SELECT request_sent FROM friends WHERE id=$1 AND friend_id=$2',
       [senderId, receiverId],
   );
@@ -33,7 +42,8 @@ async (senderId: User['id'], receiverId: User['id']) => {
 
 export const getSentRequests =
 async (userId: User['id']) => {
-  const result = await db.query(
+  type Result = QueryResult<Pick<User, 'username'>>;
+  const result: Result = await db.query(
       `SELECT username
       FROM users INNER JOIN (
         SELECT friend_id
@@ -46,7 +56,8 @@ async (userId: User['id']) => {
 
 export const getReceivedRequests =
 async (userId: User['id']) => {
-  const result = await db.query(
+  type Result = QueryResult<Pick<User, 'username'>>;
+  const result: Result = await db.query(
       `SELECT username
       FROM users INNER JOIN (
         SELECT friend_id
@@ -59,7 +70,8 @@ async (userId: User['id']) => {
 
 export const getFriendList =
 async (userId: User['id']) => {
-  const result: QueryResult<{username: string, name: string}> = await db.query(
+  type Result = QueryResult<Pick<User, 'username' | 'name'>>;
+  const result: Result = await db.query(
       `SELECT username, name
       FROM users INNER JOIN (
         SELECT friend_id
