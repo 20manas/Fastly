@@ -10,6 +10,7 @@ import {
   getSentRequestsRouter,
   getFriendListRouter,
 } from '../api/friend';
+import {getChatRouter} from '../api/message';
 
 export default (app: Express) => {
   // register
@@ -28,4 +29,7 @@ export default (app: Express) => {
   app.use('/getfriendrequests', getReceivedRequestsRouter);
   app.use('/getsentrequests', getSentRequestsRouter);
   app.use('/getfriends', getFriendListRouter);
+
+  // message
+  app.use('/getchat', getChatRouter);
 };

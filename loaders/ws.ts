@@ -52,6 +52,7 @@ export default (application: Application) => {
 
       if (res === null) return;
 
+      ws.send(JSON.stringify(res));
       users.get(data.receiver)?.send(JSON.stringify(res));
     });
   });

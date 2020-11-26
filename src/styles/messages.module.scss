@@ -1,0 +1,64 @@
+.friends {
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 50px;
+  background-color: rgba(0, 0, 0, 0.2);
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style-type: none;
+      cursor: pointer;
+      background-color: lightgreen;
+      padding: 15px;
+
+      &.current {
+        background-color: darkgreen;
+        color: white;
+      }
+    }
+  }
+}
+
+.chat {
+  position: fixed;
+  right: 0;
+  top: 50px;
+  height: calc(100vh - 50px);
+  width: calc(100vw - 250px);
+  display: flex;
+  flex-direction: column;
+
+  article {
+    flex-grow: 1;
+    overflow-y: auto;
+
+    ul {
+      padding: 0 20px;
+
+      li {
+        position: relative;
+        list-style-type: none;
+
+        &.sent {
+          text-align: right;
+        }
+      }
+    }
+  }
+  form {
+    display: flex;
+    height: 50px;
+
+    textarea[name=content] {
+      flex-grow: 1;
+    }
+    input[type=submit] {
+      cursor: pointer;
+    }
+  }
+}

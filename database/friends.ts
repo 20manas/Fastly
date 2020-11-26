@@ -1,3 +1,4 @@
+import {QueryResult} from 'pg';
 import * as db from '../loaders/database';
 import {User} from './types/users';
 
@@ -58,8 +59,8 @@ async (userId: User['id']) => {
 
 export const getFriendList =
 async (userId: User['id']) => {
-  const result = await db.query(
-      `SELECT username
+  const result: QueryResult<{username: string, name: string}> = await db.query(
+      `SELECT username, name
       FROM users INNER JOIN (
         SELECT friend_id
         FROM friends WHERE id=$1 AND request_sent IS NULL
@@ -73,12 +74,10 @@ async (userId: User['id']) => {
 
 export const addFriendRequest = async (senderId: User['id'], receiverId: User['id']) => {
   await db.query(
-      'INSERT INTO friends VALUES ($1, $2, true)',
+      `INSERT INTO friends VALUES
+      ($1, $2, true),
+      ($2, $1, false)`,
       [senderId, receiverId],
-  );
-  await db.query(
-      'INSERT INTO friends VALUES ($1, $2, false)',
-      [receiverId, senderId],
   );
   return true;
 };
