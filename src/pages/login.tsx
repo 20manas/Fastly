@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import styles from '../styles/login.module.css';
+import styles from '../styles/login.module.scss';
 
 const Login = () => (
   <section className={styles.card}>

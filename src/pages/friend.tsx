@@ -1,7 +1,7 @@
 import React, {useState, useEffect, FormEvent} from 'react';
 import Head from 'next/head';
 
-import loginstyles from '../styles/login.module.css';
+import loginstyles from '../styles/login.module.scss';
 
 const Friends = () => {
   const [list, setList] = useState(null);

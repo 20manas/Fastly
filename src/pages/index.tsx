@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 
-import styles from '../styles/index.module.css';
+import styles from '../styles/index.module.scss';
 
 const Index = () => (
   <section className={styles.card}>
