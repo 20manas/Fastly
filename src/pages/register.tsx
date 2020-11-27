@@ -2,14 +2,16 @@ import React from 'react';
 import Head from 'next/head';
 
 import loginstyles from '../styles/login.module.scss';
+import Header from '../components/header';
 
 const Register = () => (
-  <section className={loginstyles.card}>
+  <section>
     <Head>
-      <title>Messages</title>
+      <title>Register</title>
     </Head>
-    <h2>Register</h2>
-    <form action="/register" method="POST">
+    <Header />
+    <form className={loginstyles.card} action="/register" method="POST">
+      <h2>Register</h2>
       <label htmlFor="name">
         <span>Name</span>
         <input type="text" name="name" id="name" />

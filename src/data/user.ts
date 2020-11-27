@@ -14,7 +14,7 @@ const useUser = () => {
   return {
     user: data,
     isLoading: !data && !error,
-    error,
+    isError: !!error,
   };
 };
 

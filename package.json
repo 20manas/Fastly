@@ -1,15 +1,14 @@
 {
-  "name": "test",
+  "name": "fastly",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A Chat application with registration and login system built using Express, NextJS (React), PostgreSQL, TypeScript, SCSS, WebSockets and Passport.",
   "scripts": {
     "start": "NODE_ENV=production node ./build/app.js",
     "dev": "ts-node --project tsconfig.server.json app.ts",
     "build": "next build && tsc --project tsconfig.server.json"
   },
   "keywords": [],
-  "author": "",
+  "author": "20manas",
   "license": "ISC",
   "devDependencies": {
     "@tsconfig/node12": "^1.0.7",
@@ -53,10 +52,20 @@
     "redis": "^3.0.2",
     "sass": "^1.29.0",
     "swr": "^0.3.6",
-    "ws": "^7.3.1"
+    "ws": "^7.3.1",
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1",
     "utf-8-validate": "^5.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/20manas/Fastly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/20manas/Fastly/issues"
+  },
+  "homepage": "https://github.com/20manas/Fastly#readme"
 }

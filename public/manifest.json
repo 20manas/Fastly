@@ -1,6 +1,6 @@
 {
-  "short_name": "Test",
-  "name": "Test",
+  "short_name": "Fastly",
+  "name": "Fastly",
   "start_url": "/",
   "background_color": "#ffffff",
   "display": "standalone"

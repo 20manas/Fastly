@@ -42,9 +42,9 @@ async (senderId: User['id'], receiverId: User['id']) => {
 
 export const getSentRequests =
 async (userId: User['id']) => {
-  type Result = QueryResult<Pick<User, 'username'>>;
+  type Result = QueryResult<Pick<User, 'username' | 'name'>>;
   const result: Result = await db.query(
-      `SELECT username
+      `SELECT username, name
       FROM users INNER JOIN (
         SELECT friend_id
         FROM friends WHERE id=$1 AND request_sent=TRUE
@@ -56,9 +56,9 @@ async (userId: User['id']) => {
 
 export const getReceivedRequests =
 async (userId: User['id']) => {
-  type Result = QueryResult<Pick<User, 'username'>>;
+  type Result = QueryResult<Pick<User, 'username' | 'name'>>;
   const result: Result = await db.query(
-      `SELECT username
+      `SELECT username, name
       FROM users INNER JOIN (
         SELECT friend_id
         FROM friends WHERE id=$1 AND request_sent=FALSE
