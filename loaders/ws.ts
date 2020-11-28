@@ -45,6 +45,7 @@ export default (application: Application) => {
       const data = JSON.parse(message);
 
       if (!instanceOfChat(data)) return;
+      if (data.message.length === 0) return;
 
       if (users.get(data.sender) != ws) return;
 

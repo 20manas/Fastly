@@ -1,6 +1,6 @@
 import useSwr from 'swr';
 
-interface User {
+export interface User {
   name: string;
   username: string;
 }

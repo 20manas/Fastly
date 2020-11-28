@@ -1,12 +1,16 @@
 div.loading {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(rgb(200, 200, 200), rgba(250, 150, 0, 0.4));
 
   h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin: 0;
-    font-weight: 100;
+    font-weight: 200;
     font-size: 50px;
 
     &::after {

@@ -6,6 +6,8 @@ import {getUserByUsername} from '../database/users';
 export const checkAndGetChat = async (
     username: User['username'],
     friendUsername: User['username'],
+    limit: number,
+    offset: number,
 ) => {
   const user = await getUserByUsername(username);
   const friend = await getUserByUsername(friendUsername);
@@ -14,7 +16,7 @@ export const checkAndGetChat = async (
 
   if ((await getFriendRequestStatus(user.id, friend.id)) !== null) return null;
 
-  const chat = await getChat(user.id, friend.id, 100);
+  const chat = await getChat(user.id, friend.id, limit, offset);
 
   return chat.map(
       message => ({

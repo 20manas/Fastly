@@ -11,6 +11,8 @@ getChatRouter.post('/', [
   body('friend', 'Username should be alphanumeric').custom(
       (friend) => /^[A-Za-z][A-Za-z\d]*$/.test(friend),
   ),
+  body('limit', 'Limit is required as a number').isInt({min: 10, max: 200}),
+  body('offset', 'Offset is required as a number').isInt({min: 0}),
 ], async (req: Request, res: Response) => {
   const errors = validationResult(req);
 
@@ -21,7 +23,8 @@ getChatRouter.post('/', [
   if (!req.user) return res.status(404).send('You are not logged in.');
   const user = req.user as UserEssentials;
 
-  const chat = await checkAndGetChat(user.username, req.body.friend);
+  const {friend, limit, offset} = req.body;
+  const chat = await checkAndGetChat(user.username, friend, limit, offset);
 
   return res.json(chat);
 });

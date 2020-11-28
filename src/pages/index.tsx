@@ -1,18 +1,21 @@
 import React, {useEffect, useState, FormEvent} from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
-import useUser from '../data/user';
-import styles from '../styles/messages.module.scss';
+import useUser, {User} from '../data/user';
+import styles from '../styles/index.module.scss';
 import EnsureAuth from '../components/auth';
 
 const Hello = () => {
-  const {user} = useUser();
-  if (user) {
-    return (<span>Hello, {user.name}</span>);
-  } else {
-    return (<></>);
-  }
+  const {user} = useUser() as {user: User};
+  return (<span>Hello, {user.name}</span>);
 };
+
+const Logout = () => (
+  <span className={styles.logout}>
+    <Link href="/logout"><a>Logout</a></Link>
+  </span>
+);
 
 const Friends = (
     {
@@ -53,6 +56,7 @@ const Friends = (
           ))
         }
       </ul>
+      <Logout />
     </section>
   );
 };
@@ -67,9 +71,10 @@ const Chat = ({selectedFriend}: {selectedFriend: string}) => {
     date: string;
   }
 
-  const {user} = useUser();
+  const {user} = useUser() as {user: User};
 
   const [messages, setMessages] = useState<Array<Message>>([]);
+  const [chatsLoaded, setChatsLoaded] = useState<Record<string, number>>({});
 
   useEffect(() => {
     ws = new WebSocket('ws://localhost:3000/chat');
@@ -77,38 +82,40 @@ const Chat = ({selectedFriend}: {selectedFriend: string}) => {
       (ws as WebSocket).send(JSON.stringify({content: 'something from client'}));
     });
 
-    ws.addEventListener('message', data => {
-      setMessages(prevMessages =>
-        prevMessages
+    ws.addEventListener('message', data => setMessages(
+        prevMessages => prevMessages
             .concat(JSON.parse(data.data))
             .sort((mes1, mes2) => Date.parse(mes1.date) - Date.parse(mes2.date)),
-      );
-    });
+    ));
   }, []);
 
-  useEffect(() => {
-    if (selectedFriend === '') return;
-
-    fetch('/getchat', {
+  const getChat = (friend: string, limit: number, offset: number): Promise<Array<Message>> => {
+    return fetch('/getchat', {
       body: JSON.stringify({
-        friend: selectedFriend,
+        friend,
+        limit,
+        offset,
       }),
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
-    })
-        .then(res => res.json())
-        .then(res => {
-          setMessages(prevMessages =>
-            prevMessages
-                .concat(res)
-                .sort((mes1, mes2) => Date.parse(mes1.date) - Date.parse(mes2.date)),
-          );
-        });
-  }, [selectedFriend]);
+    }).then(res => res.json());
+  };
 
-  if (!user) return (<></>);
+  useEffect(() => {
+    if (selectedFriend === '') return;
+
+    if (!(selectedFriend in chatsLoaded)) {
+      getChat(selectedFriend, 50, 0)
+          .then(res => setMessages(
+              prevMessages => prevMessages
+                  .concat(res)
+                  .sort((mes1, mes2) => Date.parse(mes1.date) - Date.parse(mes2.date)),
+          ));
+      setChatsLoaded({...chatsLoaded, [selectedFriend]: 50});
+    }
+  }, [selectedFriend]);
 
   const sendMessage = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -135,12 +142,15 @@ const Chat = ({selectedFriend}: {selectedFriend: string}) => {
                   message.sender === selectedFriend ||
                   message.receiver === selectedFriend,
                 ).map(message => (
-                  <li
+                  <div
                     key={Date.parse(message.date)}
                     className={message.sender === user.username ? styles.sent : styles.received}
                   >
-                    {message.content}
-                  </li>
+                    <li
+                    >
+                      {message.content}
+                    </li>
+                  </div>
                 ))
           }
         </ul>
@@ -162,15 +172,19 @@ const Index = () => {
         <Head>
           <title>Messages</title>
         </Head>
-        <Friends
-          selectedFriend={selectedFriend}
-          setSelectedFriend={setSelectedFriend}
-        />
-        {
-          selectedFriend !== '' ?
-            <Chat selectedFriend={selectedFriend} /> :
-            <></>
-        }
+        <section
+          className={`${styles.main} ${selectedFriend !== '' ? styles.selected: ''}`}
+        >
+          <Friends
+            selectedFriend={selectedFriend}
+            setSelectedFriend={setSelectedFriend}
+          />
+          {
+            selectedFriend !== '' ?
+              <Chat selectedFriend={selectedFriend} /> :
+              <></>
+          }
+        </section>
       </>
     </EnsureAuth>
   );

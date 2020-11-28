@@ -25,14 +25,20 @@ interface Messages {
 // QUERIES
 
 export const getChat = async (
-    userId1: User['id'], userId2: User['id'], limit: number,
+    userId1: User['id'], userId2: User['id'], limit: number, offset: number,
 ) => {
+  if (!(10 <= limit && limit <= 200 && 0 <= offset)) {
+    throw Error('Limit or Offset not within range');
+  }
+
   type Result = QueryResult<Omit<Messages, 'id'>>;
   const result: Result = await db.query(
       `SELECT sender_id, receiver_id, content, sent_at
       FROM messages
-      WHERE (sender_id=$1 AND receiver_id=$2) OR (sender_id=$2 AND receiver_id=$1)`,
-      [userId1, userId2],
+      WHERE (sender_id=$1 AND receiver_id=$2) OR (sender_id=$2 AND receiver_id=$1)
+      ORDER BY id DESC
+      LIMIT $3 OFFSET $4`,
+      [userId1, userId2, limit, offset],
   );
   return result.rows;
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import loginstyles from '../styles/login.module.scss';
 import Header from '../components/header';
@@ -38,6 +39,7 @@ const Register = () => (
       </label>
 
       <input type="submit" value="Submit" />
+      <Link href="/login"><a>Login</a></Link>
     </form>
   </section>
 );

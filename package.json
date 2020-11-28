@@ -36,6 +36,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "bufferutil": "^4.0.1",
     "connect-redis": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -52,9 +53,8 @@
     "redis": "^3.0.2",
     "sass": "^1.29.0",
     "swr": "^0.3.6",
-    "ws": "^7.3.1",
-    "bufferutil": "^4.0.1",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "^5.0.2",
+    "ws": "^7.3.1"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1",

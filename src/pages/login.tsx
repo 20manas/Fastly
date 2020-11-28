@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import styles from '../styles/login.module.scss';
 import Header from '../components/header';
@@ -23,6 +24,8 @@ const Login = () => (
       </label>
 
       <input type="submit" value="GO" />
+
+      <Link href="/register"><a>Register</a></Link>
     </form>
   </section>
 );
